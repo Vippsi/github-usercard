@@ -28,7 +28,82 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+'Vippsi',
+'tetondan',
+'dustinmyers',
+'justsml',
+'luishrd',
+'bigknell',
+'iatechristmas'
+];
+
+const entryPoint = document.querySelector('.cards')
+console.log(entryPoint)
+function gitHubUsers(usersAttrs){
+  const {avatar_url, name, login, location, html_url, followers, following, bio} = usersAttrs
+  
+  const card = document.createElement('div')
+  const userImg = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const usersRealName = document.createElement('h3')
+  const usersName = document.createElement('p')
+  const usersLocation = document.createElement('p')
+  const usersProfile = document.createElement('p')
+  const usersProfileLink = document.createElement('a')
+  const usersFollowers = document.createElement('p')
+  const usersFollowing = document.createElement('p')
+  const usersBio = document.createElement('p')
+
+  card.appendChild(userImg)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(usersRealName)
+  cardInfo.appendChild(usersName)
+  cardInfo.appendChild(usersLocation)
+  cardInfo.appendChild(usersProfile)
+  
+  cardInfo.appendChild(usersFollowers)
+  cardInfo.appendChild(usersFollowing)
+  cardInfo.appendChild(usersBio)
+
+  
+
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  usersRealName.classList.add('name')
+  usersName.classList.add('username')
+
+  userImg.src = avatar_url
+  usersRealName.textContent = name
+  usersName.textContent = login
+  usersLocation.textContent =`Location: ${location}`
+  usersProfile.textContent = 'Profile: '
+  usersProfileLink.setAttribute('href', html_url)
+  usersProfileLink.textContent = `${html_url}`
+  usersFollowers.textContent = `Followers: ${followers}`
+  usersFollowing.textContent = `Following: ${following}`
+  usersBio.textContent = `Bio: ${bio}`
+
+  usersProfile.appendChild(usersProfileLink)
+  return card
+}
+
+const getUser = (userName) => {
+  console.log(userName)
+  axios.get(`https://api.github.com/users/${userName}`)
+  .then(response => {
+        const user = gitHubUsers(response.data)
+        entryPoint.appendChild(user)
+        console.log(response)
+  })
+  .catch(error => {
+    console.log(error)
+  })
+}
+
+followersArray.forEach(item => {
+  return getUser(item)
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
